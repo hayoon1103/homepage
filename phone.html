@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>전화번호 입력</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    #display { font-size: 24px; margin-bottom: 20px; border: 1px solid #ccc; padding: 10px; width: 200px; margin: 0 auto 20px; }
+    .keypad { display: grid; grid-template-columns: repeat(3, 60px); gap: 10px; justify-content: center; }
+    button { font-size: 20px; padding: 15px; }
+  </style>
+</head>
+<body>
+  <div id="display">번호를 입력하세요</div>
+  <div class="keypad">
+    <!-- 숫자 및 특수문자 버튼 -->
+    <button onclick="press('1')">1</button>
+    <button onclick="press('2')">2</button>
+    <button onclick="press('3')">3</button>
+    <button onclick="press('4')">4</button>
+    <button onclick="press('5')">5</button>
+    <button onclick="press('6')">6</button>
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button onclick="press('*')">*</button>
+    <button onclick="press('0')">0</button>
+    <button onclick="press('#')">#</button>
+  </div>
+
+  <script>
+    let input = '';
+    function press(key) {
+      if (!/[0-9]/.test(key)) return; // 숫자만 입력
+      if (input.length >= 11) return;
+      input += key;
+      display();
+    }
+
+    function display() {
+      let formatted = input;
+      if (input.length >= 4 && input.length <= 7)
+        formatted = input.slice(0, 3) + '-' + input.slice(3);
+      else if (input.length >= 8)
+        formatted = input.slice(0, 3) + '-' + input.slice(3, 7) + '-' + input.slice(7);
+      document.getElementById('display').textContent = formatted;
+    }
+  </script>
+</body>
+</html>
