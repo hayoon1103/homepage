@@ -3,119 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>한글 타자기 - 과제</title>
+    <title>나만의 타자기</title>
+    <script src="https://unpkg.com/hangul-js@0.2.6/hangul.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+        body { font-family: monospace; background-color: #f4f4f4; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .typewriter-box { background-color: #ddd; padding: 20px; border: 1px solid #ccc; box-shadow: 5px 5px 10px #aaa; margin-bottom: 20px; text-align: center; }
+        #display-window, #paper { background-color: #fff; border: 1px solid #bbb; padding: 20px; min-width: 500px; min-height: 50px; white-space: pre-wrap; margin-bottom: 10px; text-align: left; font-size: 1.1em; }
+        .keyboard { padding: 10px; border-radius: 5px; }
+        .keyboard-group { display: flex; gap: 5px; margin-bottom: 5px; padding: 5px; border-radius: 3px; }
+        .numbers { background-image: linear-gradient(to right, #FFC0CB, #FF69B4); }
+        .row1 { background-image: linear-gradient(to right, #FF69B4, #FF1493); }
+        .row2 { background-image: linear-gradient(to right, #FF1493, #DB7093); }
+        .row3 { background-image: linear-gradient(to right, #DB7093, #FFC0CB); }
+        .key { background-color: #fff; border: 1px solid #bbb; border-radius: 3px; padding: 10px; text-align: center; cursor: pointer; user-select: none; min-width: 30px; }
+        .key.active { background-color: #e0e0e0; transform: translateY(1px); box-shadow: none; }
+        .key.highlight {
+            background-color: #aaddff;
+            transition: background-color 0.1s ease-out;
         }
-        nav {
-            background-color: #333;
-            padding: 1rem;
-        }
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-        nav li {
-            margin-right: 2rem;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        main {
-            padding: 2rem;
-            min-height: 400px;
-        }
-        footer {
-            background-color: #f0f0f0;
-            padding: 1rem;
-            text-align: center;
-            margin-top: 2rem;
-        }
-        .typing-game {
-            background-color: #f9f9f9;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .word-display {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #dc3545;
-            margin: 2rem 0;
-            padding: 1rem;
-            background-color: white;
-            border-radius: 8px;
-            border: 2px solid #dc3545;
-        }
-        .input-area {
-            margin: 2rem 0;
-        }
-        .input-area input {
-            font-size: 1.5rem;
-            padding: 1rem;
-            width: 300px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            text-align: center;
-        }
-        .game-controls {
-            margin: 2rem 0;
-        }
-        .game-controls button {
-            font-size: 1.2rem;
-            padding: 1rem 2rem;
-            margin: 0 1rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .start-btn {
-            background-color: #28a745;
-            color: white;
-        }
-        .reset-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-        .score {
-            font-size: 1.5rem;
-            margin: 1rem 0;
-        }
-        .correct {
-            color: #28a745;
-        }
-        .wrong {
-            color: #dc3545;
-        }
+        .info { font-size: 0.8em; color: #777; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <!-- GNB (Global Navigation Bar) -->
-    <nav>
-        <ul>
-            <li><a href="index.html">홈</a></li>
-            <li><a href="sitemap.html">사이트맵</a></li>
-            <li><a href="english-typing.html">영문 타자기</a></li>
-            <li><a href="korean-typing.html">한글 타자기</a></li>
-            <li><a href="calculator.html">계산기</a></li>
-            <li><a href="phone.html">전화기</a></li>
-        </ul>
-    </nav>
+    <div class="typewriter-box">
+        <div id="display-window"></div>
+        <label id="paper"></label>
+        <div class="keyboard">
+            <div class="keyboard-group numbers">
+                <div class="key" data-key="1">1</div> <div class="key" data-key="2">2</div> <div class="key" data-key="3">3</div> <div class="key" data-key="4">4</div> <div class="key" data-key="5">5</div> <div class="key" data-key="6">6</div> <div class="key" data-key="7">7</div> <div class="key" data-key="8">8</div> <div class="key" data-key="9">9</div> <div class="key" data-key="0">0</div>
+            </div>
+            <div class="keyboard-group row1">
+                <div class="key" data-key="q" data-korean="ㅂ" data-shift-korean="ㅃ">q</div> <div class="key" data-key="w" data-korean="ㅈ" data-shift-korean="ㅉ">w</div> <div class="key" data-key="e" data-korean="ㄷ" data-shift-korean="ㄸ">e</div> <div class="key" data-key="r" data-korean="ㄱ" data-shift-korean="ㄲ">r</div> <div class="key" data-key="t" data-korean="ㅅ" data-shift-korean="ㅆ">t</div> <div class="key" data-key="y" data-korean="ㅛ">y</div> <div class="key" data-key="u" data-korean="ㅕ">u</div> <div class="key" data-key="i" data-korean="ㅑ">i</div> <div class="key" data-key="o" data-korean="ㅐ" data-shift-korean="ㅒ">o</div> <div class="key" data-key="p" data-korean="ㅔ" data-shift-korean="ㅖ">p</div>
+            </div>
+            <div class="keyboard-group row2">
+                <div class="key" data-key="a" data-korean="ㅁ">a</div> <div class="key" data-key="s" data-korean="ㄴ">s</div> <div class="key" data-key="d" data-korean="ㅇ">d</div> <div class="key" data-key="f" data-korean="ㄹ">f</div> <div class="key" data-key="g" data-korean="ㅎ">g</div> <div class="key" data-key="h" data-korean="ㅗ">h</div> <div class="key" data-key="j" data-korean="ㅏ">j</div> <div class="key" data-key="k" data-korean="ㅣ">k</div> <div class="key" data-key="l" data-korean="ㅜ">l</div> <div class="key" data-key=";" data-korean="ㅡ">;</div>
+            </div>
+            <div class="keyboard-group row3">
+                <div class="key" data-key="z" data-korean="ㅋ">z</div> <div class="key" data-key="x" data-korean="ㅌ">x</div> <div class="key" data-key="c" data-korean="ㅊ">c</div> <div class="key" data-key="v" data-korean="ㅍ">v</div> <div class="key" data-key="b" data-korean="ㅠ">b</div> <div class="key" data-key="n" data-korean="ㅜ">n</div> <div class="key" data-key="m" data-korean="ㅡ">m</div> <div class="key" data-key="," data-korean=",">,</div> <div class="key" data-key="." data-korean=".">.</div> <div class="key" data-key="/">/</div>
+            </div>
+            <div class="keyboard-group">
+                <div class="key" data-key=" " style="flex-grow: 1;">Space</div>
+                <div class="key" data-key="Backspace">Backspace</div>
+                <div class="key" data-key="Enter">Enter</div>
+                <div class="key" data-key="ShiftLeft">Shift</div>
+                <div class="key" data-key="ShiftRight">Shift</div>
+            </div>
+        </div>
+        <div class="info"> 제작자: 공하윤 (학번: 2402149, 소속: 한양여자대학교 빅데이터과) </div>
+    </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>학교: [한양여자대학교] | 학과: [빅데이터과] 학번: [2402149] 이름: [공하윤]</p>
-    </footer>
-  
+    <script>
+        const paperElement = document.getElementById('paper');
+        const displayWindowElement = document.getElementById('display-window');
+        const keyboardKeys = document.querySelectorAll('.key');
+
+        let isKoreanMode = false;
+        let isShiftPressed = false;
+        let fullTextBuffer = []; // 전체 입력 내용
+        let currentKoreanComposeBuffer = []; // hangul-js 조합 버퍼
+
+        // 키보드 자판 데이터
+        const keyMap = {
+            'q': { eng: 'q', kor: 'ㅂ', shiftKor: 'ㅃ' }, 'w': { eng: 'w', kor: 'ㅈ', shiftKor: 'ㅉ' },
+            'e': { eng: 'e', kor: 'ㄷ', shiftKor: 'ㄸ' }, 'r': { eng: 'r', kor: 'ㄱ', shiftKor: 'ㄲ' },
+            't': { eng: 't', kor: 'ㅅ', shiftKor: 'ㅆ' }, 'y': { eng: 'y', kor: 'ㅛ' },
+            'u': { eng: 'u', kor: 'ㅕ' }, 'i': { eng: 'i', kor: 'ㅑ' },
+            'o': { eng: 'o', kor: 'ㅐ', shiftKor: 'ㅒ' }, 'p': { eng: 'p', kor: 'ㅔ', shiftKor: 'ㅖ' },
+            'a': { eng: 'a', kor: 'ㅁ' }, 's': { eng: 's', kor: 'ㄴ' },
+            'd': { eng: 'd', kor: 'ㅇ' }, 'f': { eng: 'f', kor: 'ㄹ' },
+            'g': { eng: 'g', kor: 'ㅎ' }, 'h': { eng: 'h', kor: 'ㅗ' },
+            'j': { eng: 'j', kor: 'ㅏ' }, 'k': { eng: 'k', kor: 'ㅣ' },
+            'l': { eng: 'l', kor: 'ㅜ' }, ';': { eng: ';', kor: 'ㅡ' },
+            'z': { eng: 'z', kor: 'ㅋ' }, 'x': { eng: 'x', kor: 'ㅌ' },
+            'c': { eng: 'c', kor: 'ㅊ' }, 'v': { eng: 'v', kor: 'ㅍ' },
+            'b': { eng: 'b', kor: 'ㅠ' }, 'n': { eng: 'n', kor: 'ㅜ' },
+            'm': { eng: 'm', kor: 'ㅡ' },
+            ',': { eng: ',', kor: ',' }, '.': { eng: '.', kor: '.' }, '/': { eng: '/', kor: '/' },
+            '1': { eng: '1', kor: '1' }, '2': { eng: '2', kor: '2' }, '3': { eng: '3', kor: '3' },
+            '4': { eng: '4', kor: '4' }, '5': { eng: '5', kor: '5' }, '6': { eng: '6', kor: '6' },
+            '7': { eng: '7', kor: '7' }, '8': { eng: '8', kor: '8' }, '9': { eng: '9', kor: '9' },
+            '0': { eng: '0', kor: '0' }
+        };
+
+        function updateDisplay() {
+            const currentText = fullTextBuffer.join('');
+            paperElement.textContent = currentText;
+            displayWindowElement.textContent = currentText;
+        }
+
+        function updateKeyboardDisplay() {
+            keyboardKeys.forEach(keyElement => {
+                const dataKey = keyElement.dataset.key;
+                const map = keyMap[dataKey];
+
+                if ([' ', 'Backspace', 'Enter', 'ShiftLeft', 'ShiftRight'].includes(dataKey)) return;
+
+                if (map) {
+                    keyElement.textContent = isKoreanMode && (isShiftPressed && map.shiftKor ? map.shiftKor : map.kor) || map.eng;
+                }
+            });
+        }
+
+        function highlightKey(code) {
+            const keyElement = document.querySelector(`.key[data-key="${code.replace('Key', '').toLowerCase()}"]`) ||
+                               document.querySelector(`.key[data-key="${code.replace('Digit', '')}"]`) ||
+                               document.querySelector(`.key[data-key="${code.toLowerCase()}"]`) ||
+                               document.querySelector(`.key[data-key="${code === 'Semicolon' ? ';' : code === 'Comma' ? ',' : code === 'Period' ? '.' : code === 'Slash' ? '/' : ''}"]`);
+
+            if (keyElement) {
+                keyElement.classList.add('highlight');
+                setTimeout(() => keyElement.classList.remove('highlight'), 100);
+            }
+        }
+
+        updateKeyboardDisplay(); // 초기 키보드 상태 업데이트
+        document.body.focus();
+
+        document.addEventListener('keydown', (event) => {
+            const { key, code, altKey, ctrlKey, metaKey } = event;
+
+            highlightKey(code);
+
+            if (code.startsWith('Shift')) {
+                if (!isShiftPressed) {
+                    isShiftPressed = true;
+                    updateKeyboardDisplay();
+                }
+                event.preventDefault();
+                return;
+            }
+
+            if (key === '.' && !altKey && !ctrlKey && !metaKey) {
+                isKoreanMode = !isKoreanMode;
+                currentKoreanComposeBuffer = [];
+                updateKeyboardDisplay();
+                event.preventDefault();
+                return;
+            }
+
+            if (key === 'Backspace') {
+                event.preventDefault();
+                if (fullTextBuffer.length === 0 && currentKoreanComposeBuffer.length === 0) return;
+
+                if (isKoreanMode && currentKoreanComposeBuffer.length > 0) {
+                    currentKoreanComposeBuffer.pop();
+                    fullTextBuffer[fullTextBuffer.length - 1] = currentKoreanComposeBuffer.length > 0 ? Hangul.assemble(currentKoreanComposeBuffer) : (fullTextBuffer.pop(), '');
+                } else {
+                    fullTextBuffer.pop();
+                    currentKoreanComposeBuffer = [];
+                }
+            } else if (key === 'Enter') {
+                currentKoreanComposeBuffer = [];
+                fullTextBuffer.push('\n');
+            } else if (key === ' ') {
+                currentKoreanComposeBuffer = [];
+                fullTextBuffer.push(' ');
+            } else if (key.length === 1 && !altKey && !ctrlKey && !metaKey) {
+                const map = keyMap[key.toLowerCase()];
+                if (isKoreanMode) {
+                    if (map && (map.kor || map.shiftKor)) {
+                        const jamoToAdd = isShiftPressed && map.shiftKor ? map.shiftKor : map.kor;
+                        const previousAssembledChar = Hangul.assemble(currentKoreanComposeBuffer);
+                        currentKoreanComposeBuffer.push(jamoToAdd);
+                        const newAssembledChar = Hangul.assemble(currentKoreanComposeBuffer);
+
+                        if (fullTextBuffer.length > 0 && fullTextBuffer[fullTextBuffer.length - 1] === previousAssembledChar) {
+                            fullTextBuffer[fullTextBuffer.length - 1] = newAssembledChar;
+                        } else {
+                            fullTextBuffer.push(newAssembledChar);
+                        }
+                    } else {
+                        currentKoreanComposeBuffer = [];
+                        fullTextBuffer.push(key);
+                    }
+                } else {
+                    currentKoreanComposeBuffer = [];
+                    fullTextBuffer.push(key);
+                }
+            }
+            updateDisplay();
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (event.code.startsWith('Shift')) {
+                isShiftPressed = false;
+                updateKeyboardDisplay();
+            }
+        });
+
+        // 가상 키보드 클릭 이벤트
+        keyboardKeys.forEach(keyElement => {
+            keyElement.addEventListener('mousedown', () => keyElement.classList.add('active'));
+            keyElement.addEventListener('mouseup', () => keyElement.classList.remove('active'));
+            keyElement.addEventListener('click', () => {
+                const dataKey = keyElement.dataset.key;
+                if (dataKey.startsWith('Shift')) {
+                    isShiftPressed = !isShiftPressed;
+                    updateKeyboardDisplay();
+                    return;
+                }
+                if (dataKey === '.') {
+                    isKoreanMode = !isKoreanMode;
+                    currentKoreanComposeBuffer = [];
+                    updateKeyboardDisplay();
+                    return;
+                }
+
+                const simulatedKey = keyElement.textContent;
+                const simulatedCode = dataKey.length === 1 && /[a-z]/.test(dataKey) ? `Key${dataKey.toUpperCase()}` :
+                                      dataKey.length === 1 && /[0-9]/.test(dataKey) ? `Digit${dataKey}` : dataKey;
+
+                document.dispatchEvent(new KeyboardEvent('keydown', {
+                    key: simulatedKey,
+                    code: simulatedCode,
+                    shiftKey: isShiftPressed,
+                    bubbles: true,
+                    cancelable: true
+                }));
+            });
+        });
     </script>
 </body>
 </html>
