@@ -3,7 +3,7 @@
 <head> 
     <meta charset="UTF-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>나만의 타자기</title> 
+    <title>영문 타자기</title> 
     <style> 
         body { 
             font-family: monospace; 
@@ -149,8 +149,7 @@ row3 배경 그라데이션 */
  
     <script> 
         const paperElement = document.getElementById('paper'); 
-        const displayWindowElement = document.getElementById('display
-window'); 
+        const displayWindowElement = document.getElementById('display window'); 
  
         // 문서 전체에 키보드 입력 이벤트 리스너 추가 
         document.addEventListener('keydown', (event) => { 
@@ -163,10 +162,8 @@ window');
                 displayWindowElement.textContent += key; 
             } else if (key === 'Backspace') { 
                 // 백스페이스 처리 (마지막 글자 삭제) 
-                paperElement.textContent = paperElement.textContent.slice(0, 
-1); 
-                displayWindowElement.textContent = 
-displayWindowElement.textContent.slice(0, -1); 
+                paperElement.textContent = paperElement.textContent.slice(0, 1); 
+                displayWindowElement.textContent = displayWindowElement.textContent.slice(0, -1); 
             } else if (key === 'Enter') { 
                 // 엔터 키 처리 (줄 바꿈) 
                 paperElement.textContent += '\n'; 
@@ -176,8 +173,7 @@ displayWindowElement.textContent.slice(0, -1);
                 paperElement.textContent += ' '; 
                 displayWindowElement.textContent += ' '; 
             } 
-            // 다른 특수 키 (Shift, Ctrl, Alt 등)에 대한 처리는 필요에 따라 추가할 
-수 있습니다. 
+            // 다른 특수 키 (Shift, Ctrl, Alt 등)에 대한 처리는 필요에 따라 추가할 수 있습니다. 
         }); 
  
         // 페이지 로딩 시 포커스를 body에 줘서 키보드 이벤트가 발생하도록 함 
